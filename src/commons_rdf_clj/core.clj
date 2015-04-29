@@ -1,15 +1,19 @@
-(ns commons-rdf-clj.core)
+(ns commons-rdf-clj.core
+  (:import
+    (org.apache.commons.rdf.api Graph)
+    (org.apache.commons.rdf.simple SimpleRDFTermFactory))
+  )
 
 
-(def ^:dynamic *factory* (. SimpleRDFTermFactory))
+(def ^:dynamic *factory* (SimpleRDFTermFactory.))
 
 (defmacro with-factory [factory & body]
   `(binding [*factory* ~factory]
     ~@body))
 
 (defn create-graph []
-  (. factory createGraph))
+  (.createGraph *factory*))
 
 
-(defn graph-size [g]
-  (. g size))
+(defn graph-size [^Graph g]
+  (.size g))
