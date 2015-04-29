@@ -1,6 +1,15 @@
 (ns commons-rdf-clj.core)
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+
+(def ^:dynamic *factory* (. SimpleRDFTermFactory))
+
+(defmacro with-factory [factory & body]
+  `(binding [*factory* ~factory]
+    ~@body))
+
+(defn create-graph []
+  (. factory createGraph))
+
+
+(defn graph-size [g]
+  (. g size))

@@ -6,4 +6,6 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.apache.commons/commons-rdf-api "0.1-incubating-SNAPSHOT"]
                  [org.apache.commons/commons-rdf-simple "0.1.0-incubating-SNAPSHOT"]
-                ])
+                ]
+  :repositories { "apache-snapshot" "http://repository.apache.org/snapshots"}
+              )
