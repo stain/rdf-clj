@@ -26,4 +26,15 @@
   (testing "Creating language literal"
     (let [lit (create-literal "Hello" "en")]
       (is (= "Hello" (.getLexicalForm lit)))
+      ; Need to (.get the Optional)
       (is (= "en" (.get (.getLanguageTag lit)))))))
+
+(deftest test-create-triple
+  (testing "Creating triple"
+    (let [subj (create-iri "http://example.com/ex1")
+          pred (create-iri "http://example.com/says")
+          obj (create-literal "Hello")
+          triple (create-triple subj pred obj)]
+          (is (= subj (.getSubject triple)))
+          (is (= pred (.getPredicate triple)))
+          (is (= obj (.getObject triple))))))
