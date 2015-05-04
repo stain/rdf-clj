@@ -17,11 +17,16 @@
 (defn create-iri [iri-string]
   (.createIRI *factory* iri-string))
 
+(defn as-iri [iri]
+  (if (instance? IRI iri) iri
+    (create-iri (str iri))))
+
 (defn create-literal
-  ([^String literal]
+  ([literal]
     (.createLiteral *factory* literal))
-  ([^String literal ^IRI type]
-    (.createLiteral *factory* literal type)))
+  ([literal lang-or-type]
+    (.createLiteral *factory* literal lang-or-type)))
+
 
 
 (defn create-triple [subject predicate object]

@@ -14,6 +14,21 @@
     (let [iri (create-iri "http://example.com/")]
       (is (= "http://example.com/" (.getIRIString iri))))))
 
+(deftest test-as-iri
+  (testing "as-iri from IRI"
+    (let [iri (create-iri "http://example.com/already-iri")]
+      (is (identical? iri (as-iri iri)))))
+  (testing "as-iri from String"
+    (is (= "http://example.com/was-string"
+             (.getIRIString (as-iri "http://example.com/was-string")))))
+  (testing "as-iri from java.net.URI"
+    (is (= "http://example.com/was-uri")
+              (.getIRIString (as-iri (java.net.URI/create "http://example.com/was-uri")))))
+  (testing "as-iri from symbol"
+    (is (= "urn:uuid:9168e8bf-9399-4335-af2d-141d100fbcc1"
+             (.getIRIString (as-iri 'urn:uuid:9168e8bf-9399-4335-af2d-141d100fbcc1))))))
+
+
 (deftest test-create-literal
   (testing "Creating plain literal"
     (let [lit (create-literal "Hello")]
