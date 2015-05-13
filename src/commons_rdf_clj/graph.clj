@@ -21,12 +21,16 @@
   { :iri iri-str})
 
 
-(defn- uuid []
+(defn uuid []
   (str (UUID/randomUUID)))
 
 (def ^:dynamic *salt* (uuid))
 
 ;; todo: (with-salt ?)
+
+(defmacro with-salt [ & body]
+  `(binding [*salt* (uuid)]
+    ~@body))
 
 (defn create-bnode
   ([]      { :bnode  (uuid) })
