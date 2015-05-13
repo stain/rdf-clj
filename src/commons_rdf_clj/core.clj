@@ -27,8 +27,6 @@
   ([literal lang-or-type]
     (.createLiteral *factory* literal lang-or-type)))
 
-
-
 (defn create-triple [subject predicate object]
   (.createTriple *factory* subject predicate object))
 
@@ -37,3 +35,5 @@
 
 (defn graph-size [^Graph graph]
   (.size graph))
+
+;(defn )
