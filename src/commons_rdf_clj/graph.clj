@@ -28,7 +28,7 @@
 
 ;; todo: (with-salt ?)
 
-(defmacro with-salt [ & body]
+(defmacro with-salt [& body]
   `(binding [*salt* (uuid)]
     ~@body))
 
