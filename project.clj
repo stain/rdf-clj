@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.apache.commons/commons-rdf-api "0.1.0-incubating"]
                  [org.apache.commons/commons-rdf-simple "0.1.0-incubating"]
-                 [potemkin "0.3.13"]
+;                [potemkin "0.3.13"]
                 ]
   :repositories { "apache-snapshot" "http://repository.apache.org/snapshots"}
               )
