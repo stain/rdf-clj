@@ -1,11 +1,16 @@
 (ns commons-rdf-clj.types
   (:import
-    (org.apache.commons.rdf.api Graph IRI RDFTermFactory)
+    (org.apache.commons.rdf.api Graph IRI Triple RDFTermFactory)
     (java.util UUID)
     (org.apache.commons.rdf.simple SimpleRDFTermFactory))
     )
 
 
+(def ^:dynamic *factory* (new SimpleRDFTermFactory))
+
+(defmacro with-factory [factory & body]
+  `(binding [*factory* ~factory]
+    ~@body))
 
 (defprotocol Factory
   (graph
@@ -22,6 +27,7 @@
     [f t]
     [f subj pred obj])
 )
+
 
 (defprotocol PGraph
   (add-triple
@@ -44,18 +50,20 @@
 (extend-type Graph
   PGraph
     (add-triple [g tripl]
-      (.add g (triple tripl))
+      (.add g tripl) ;; TODO: Type cohersion
       g)
     (add-triple [g subj pred obj]
-      (.add g (triple subj pred obj)
-      g))
+      (.add g subj pred obj) ;; TODO: Type cohersion
+      g)
 )
 
 
 (extend-type clojure.lang.Seqable
   PGraph
-  (add-triple [g tripl])
-    (conj g (triple tripl))
+    (add-triple [g tripl]
+      (conj g tripl))
+    (add-triple [g s p o]
+        (conj g {:subject s :prediicate p :object o}))
 )
 
 (extend-type Triple
@@ -69,7 +77,6 @@
     (subject [m] (:subject m))
     (predicate [m] (:predicate m))
     (object [m]) (:object m))
-
 
 
 (extend-type RDFTermFactory
