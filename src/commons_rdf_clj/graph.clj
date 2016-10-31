@@ -2,7 +2,7 @@
   (:import
     (org.apache.commons.rdf.api Graph IRI)
     (java.util UUID)
-    (org.apache.commons.rdf.simple SimpleRDFTermFactory))
+    (org.apache.commons.rdf.simple SimpleRDF))
     )
 
 (defn is-iri? [obj]

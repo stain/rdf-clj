@@ -1,11 +1,11 @@
 (ns commons-rdf-clj.core
   (:import
     (org.apache.commons.rdf.api Graph IRI)
-    (org.apache.commons.rdf.simple SimpleRDFTermFactory))
+    (org.apache.commons.rdf.simple SimpleRDF))
   )
 
 
-(def ^:dynamic *factory* (new SimpleRDFTermFactory))
+(def ^:dynamic *factory* (new SimpleRDF))
 
 (defmacro with-factory [factory & body]
   `(binding [*factory* ~factory]

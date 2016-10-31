@@ -1,5 +1,5 @@
 (ns commons-rdf-clj.core-test
-  (:import (org.apache.commons.rdf.simple SimpleRDFTermFactory))
+  (:import (org.apache.commons.rdf.simple SimpleRDF))
   (:require [clojure.test :refer :all]
             [commons-rdf-clj.core :refer :all]))
 
