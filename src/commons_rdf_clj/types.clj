@@ -121,19 +121,27 @@
 
 (extend-type RDF
   Factory
-    (graph [f] (.createGraph f))
-    (graph [f g] (if-instance Graph g
-      (reduce add-triple (graph f) g)))
+      (graph
+        ([f] (.createGraph f))
+        ([f g] (if-instance Graph g
+          (reduce add-triple (graph f) g))))
     (iri [f iri] (if-instance IRI iri (.createIRI f (str iri))))
-    (literal [f lit] (if-instance Literal lit) (.createLiteral f (str lit)))
-    (literal [f lit type-or-lang] (.createLiteral f
-        (str lit)
-        (if-instance String type-or-lang
-          (iri f type-or-lang))))
-    (blanknode [f] (.createBlankNode f))
-    (blanknode [f name] (.createBlankNode f (str name)))
-    (triple [f t] (if-instance Triple t (.createTriple f (subject t) (predicate t) (object t))))
-    (triple [f subj pred obj] (.createTriple f subj pred obj)) ;; TODO: Type conversion
+    (literal
+      ([f lit]
+        (if-instance Literal lit) (.createLiteral f (str lit)))
+      ([f lit type-or-lang]
+        (.createLiteral f (str lit)
+          (if-instance String type-or-lang
+            (iri f type-or-lang)))))
+    (blanknode
+      ([f]
+        (.createBlankNode f))
+      ([f name]
+        (.createBlankNode f (str name))))
+    (triple
+      ([f t]
+        (if-instance Triple t (.createTriple f (subject t) (predicate t) (object t))))
+      ([f subj pred obj] (.createTriple f subj pred obj))) ;; TODO: Type conversion
 )
 
 (defprotocol Term
@@ -210,17 +218,21 @@
       (java.util.UUID/fromString (str id)))))
 
 (extend-type Seqable Factory
-  (graph [f] (set f))
-  (graph [f g] (set g))
+  (graph
+    ([f] (set f))
+    ([f g] (set g)))
 
   (iri [f iri] (assoc f :iri (str iri)))
 
-  (literal [f lit] (assoc f :literal (str lit)))
-  (literal [f lit type-or-lang] (assoc (literal f lit)
-    (if (iri? type-or-lang)
-      {:datatype (iri-str type-or-lang)}
-      {:language (name type-or-lang)})))
+  (literal
+    ([f lit] (assoc f :literal (str lit)))
+    ([f lit type-or-lang]
+      (assoc (literal f lit)
+        (if (iri? type-or-lang)
+          {:datatype (iri-str type-or-lang)}
+          {:language (name type-or-lang)}))))
 
-  (blanknode [f] (assoc f :blanknode (uuid)))
-  (blanknode [f id] (assoc f :blanknode (name id)))
+  (blanknode
+    ([f] (assoc f :blanknode (uuid)))
+    ([f id] (assoc f :blanknode (name id))))
 )
