@@ -1,8 +1,11 @@
 (ns commons-rdf-clj.core
-  (:import
-    (org.apache.commons.rdf.api Graph IRI)
-    (org.apache.commons.rdf.simple SimpleRDF))
-  )
+  (:require
+    [commons-rdf-clj.protocols :as p]
+    [commons-rdf-clj.ns :refer :all]
+    [commons-rdf-clj.seq]
+    [commons-rdf-clj.commonsrdf]
+    ))
+);
 
 
 (def ^:dynamic *factory* (new SimpleRDF))
@@ -11,30 +14,46 @@
   `(binding [*factory* ~factory]
     ~@body))
 
-(defn create-graph []
-  (.createGraph *factory*))
 
-(defn create-iri [iri-string]
-  (.createIRI *factory* iri-string))
+; expose p/Graph protocol using *factory*
 
-(defn as-iri [iri]
-  (if (instance? IRI iri) iri
-    (create-iri (str iri))))
+(defn graph
+    ([] (p/graph *factory*))
+    ([g (p/graph *factory* g)]))
 
-(defn create-literal
-  ([literal]
-    (.createLiteral *factory* literal))
-  ([literal lang-or-type]
-    (.createLiteral *factory* literal lang-or-type)))
+(defn iri
+  [iri] (p/iri *factory* iri))
 
-(defn create-triple [subject predicate object]
-  (.createTriple *factory* subject predicate object))
+(defn literal
+  ([lit] (p/literal *factory* lit))
+  ([lit type-or-lang] (p/literal *factory* lit type-or-lang)))
 
-(defn add-triple [graph triple]
-  (.add graph triple))
+(defn blanknode
+  ([] (p/blanknode *factory*))
+  ([label] (p/blanknode *factory* label)))
 
-(defn graph-size [^Graph graph]
-  (.size graph))
+(defn triple
+  ([t] (p/triple *factory* t))#
+  ([subj pred obj] (p/triple *factory* subj pred obj)))
 
-;(defn )
-;(defn )
+; expose p/Term protocol
+(defn iri? [term] (p/iri? term)))
+(defn literal? [term] (p/literal? term))
+(defn blanknode? [term] (p/blanknode? term))
+(defn ntriples-str [term] (p/ntriples-str term)))
+(defn iri-str [term] (p/iri-str term)))
+(defn literal-str [term] (p/literal-str term)))
+(defn literal-lang [term] (p/literal-lang term)))
+(defn literal-type [term] (p/literal-type term)))
+(defn blanknode-id [term] (p/blanknode-id term)))
+
+; expose p/Triple protocol
+(defn subject [t] (p/subject t))
+(defn predicate [t] (p/predicate t))
+(defn object [t] (p/object t))
+
+; expose p/Graph protocol
+(defn add-triple
+  ([g t] (p/add-triple g t))
+  ([g subj pred obj] (p/add-triple ))
+(defn triple-count [g] (p/triple-count g))
