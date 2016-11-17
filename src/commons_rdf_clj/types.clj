@@ -149,7 +149,7 @@
   (literal? [term])
   (blanknode? [term])
 
-  (ntripes-str [term])
+  (ntriples-str [term])
 
   (iri-str [term])
 
