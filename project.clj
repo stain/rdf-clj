@@ -10,6 +10,7 @@
 ;                 [org.apache.commons/commons-rdf-rdf4j "0.3.0-incubating"]
 ;                 [org.apache.commons/commons-rdf-jsonld-java "0.3.0-incubating"]
 ;                [potemkin "0.3.13"]
+                 
                 ]
 ;  :repositories { "apache-snapshot" "http://repository.apache.org/snapshots"}
               )
