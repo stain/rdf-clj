@@ -2,12 +2,14 @@
   (:require
     [commons-rdf-clj.protocols :as p]))
 
+; A standalone version of seq's (iri)
+; to avoid circular imports
 (defn- iri [base local]
   {:iri (str base local)})
 
 (defn rdf-namespace [base & names]
-  (apply hash-map (mapcat #(list %1 (uri base %1)))
-          (map name names)))
+  (apply hash-map (mapcat #(list %1 (iri base %1))
+          (map name names))))
 
 
 (defn- ns-rdf- [namespace base & names]
@@ -18,12 +20,12 @@
 ;
 (defmacro ns-rdf [n base & names]
   `(ns-rdf- (symbol '~n) ~base ~@names)
-  `(def ~n (rdf-namespace ~base ~@names))
+  ;`(def ~n (rdf-namespace ~base ~@names))
 )
 
 
 (ns-rdf rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  :langString :HTML :PlainLiteral :XMLLiteral))
+  :langString :HTML :PlainLiteral :XMLLiteral)
 
 (ns-rdf xsd "http://www.w3.org/2001/XMLSchema#"
   :string   :normalizedString
@@ -52,4 +54,4 @@
 
   ; XML stuff?
   :Name :NCName :NMTOKEN :token :language
-))
+)
