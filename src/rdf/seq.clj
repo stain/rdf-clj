@@ -12,14 +12,6 @@
       )
 )
 
-; Default: not iri, literal or blanknode
-(extend-type java.lang.Object p/Term
-  (iri? [obj] false)
-  (literal? [obj] false)
-  (blanknode? [obj] false)
-  ; deliberately let the rest of the functions fail, exceot
-)
-
 (extend-type String p/Term
   (iri? [obj] false)
   (blanknode? [obj] false)
@@ -108,22 +100,20 @@
 
 
 ;
-(extend-type Seqable p/RDF
+(extend-type Associative p/RDF
   (graph
     ([f] (set f))
     ([f g] (set g)))
   (triple
-    ([f t] {:subject (p/subject t) :predicate (p/predicate t) :object (p/object t)})
-    ([f subj pred obj { :subject subj :predicate pred :object obj }])) ;; TODO: Map to our own types?
-)
+    ([f t] (merge f {:subject (p/subject t) :predicate (p/predicate t) :object (p/object t)}))
+    ([f subj pred obj] (merge f { :subject subj :predicate pred :object obj }))) ;; TODO: Map to our own types?
 
-(extend-type Associative p/RDF
   (iri [f iri] (assoc f :iri (p/iri-str iri)))
 
   (literal
     ([f lit] (assoc f :literal (str lit)))
     ([f lit type-or-lang]
-      (assoc f (p/literal f lit)
+      (merge f {:literal (str lit)}
         (if (p/iri? type-or-lang)
           {:datatype (p/iri-str type-or-lang)}
           {:language (name type-or-lang)}))))

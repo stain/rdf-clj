@@ -46,3 +46,21 @@
     [g subj pred obj])
   (triple-count [g])
 )
+
+
+; nil: not iri, literal or blanknode
+(extend-type nil Term
+  (iri? [obj] false)
+  (literal? [obj] false)
+  (blanknode? [obj] false)
+  ; deliberately let the rest of the functions fail
+)
+
+
+; Default: not iri, literal or blanknode
+(extend-type java.lang.Object Term
+  (iri? [obj] false)
+  (literal? [obj] false)
+  (blanknode? [obj] false)
+  ; deliberately let the rest of the functions fail
+)

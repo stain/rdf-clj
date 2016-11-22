@@ -17,7 +17,7 @@
 (deftest test-as-iri
   (testing "as-iri from IRI"
     (let [i (iri "http://example.com/already-iri")]
-      (is (identical? i (iri i)))))
+      (is (= i (iri i)))))
   (testing "iri from String"
     (is (= "http://example.com/was-string"
              (iri-str (iri "http://example.com/was-string")))))
