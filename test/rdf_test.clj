@@ -23,10 +23,7 @@
              (iri-str (iri "http://example.com/was-string")))))
   (testing "as-iri from java.net.URI"
     (is (= "http://example.com/was-uri")
-              (iri-str (iri (java.net.URI/create "http://example.com/was-uri")))))
-  (testing "as-iri from symbol"
-    (is (= "urn:uuid:9168e8bf-9399-4335-af2d-141d100fbcc1"
-             (iri-str (iri 'urn:uuid:9168e8bf-9399-4335-af2d-141d100fbcc1))))))
+              (iri-str (iri (java.net.URI/create "http://example.com/was-uri"))))))
 
 
 (deftest test-create-literal

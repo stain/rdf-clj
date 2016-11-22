@@ -8,7 +8,7 @@
     [rdf.commonsrdf]))
 
 
-(def ^:dynamic *rdf* (new SimpleRDF))
+(def ^:dynamic *rdf* {})
 
 (defmacro with-rdf [r & body]
   `(binding [*rdf* ~r]

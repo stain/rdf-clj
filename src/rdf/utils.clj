@@ -1,7 +1,7 @@
 (ns rdf.utils
   (:import
-    [java.util UUID]
-  )
+    [java.util UUID])
+  (:require [clojure.string :as string])
 )
 
 (defn uuid
@@ -16,3 +16,6 @@
 (defmacro if-instance [type value & body]
   `(if (instance? ~type ~value) ~value
     ~@body))
+
+(defn escape-literal [s]
+  (string/replace s "\"" "\\\""))
