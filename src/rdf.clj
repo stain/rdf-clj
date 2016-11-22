@@ -1,4 +1,4 @@
-(ns rdf.core
+(ns rdf
   (:import
     (org.apache.commons.rdf.simple SimpleRDF))
   (:require

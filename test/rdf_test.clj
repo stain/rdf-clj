@@ -1,7 +1,7 @@
-(ns rdf.core-test
+(ns rdf-test
   (:import (org.apache.commons.rdf.simple SimpleRDF))
   (:require [clojure.test :refer :all]
-            [rdf.core :refer :all]))
+            [rdf :refer :all]))
 
 
 (deftest test-create-graph
