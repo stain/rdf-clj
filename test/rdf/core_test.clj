@@ -1,7 +1,7 @@
-(ns commons-rdf-clj.core-test
+(ns rdf.core-test
   (:import (org.apache.commons.rdf.simple SimpleRDF))
   (:require [clojure.test :refer :all]
-            [commons-rdf-clj.core :refer :all]))
+            [rdf.core :refer :all]))
 
 
 (deftest test-create-graph
@@ -16,8 +16,8 @@
 
 (deftest test-as-iri
   (testing "as-iri from IRI"
-    (let [iri (iri "http://example.com/already-iri")]
-      (is (identical? iri (iri iri)))))
+    (let [i (iri "http://example.com/already-iri")]
+      (is (identical? i (iri i)))))
   (testing "iri from String"
     (is (= "http://example.com/was-string"
              (iri-str (iri "http://example.com/was-string")))))
@@ -41,7 +41,7 @@
   (testing "Creating language literal"
     (let [lit (literal "Hello" "en")]
       (is (= "Hello" (literal-str lit)))
-      (is (= "en" (literal-lang lit)))))))
+      (is (= "en" (literal-lang lit))))))
 
 (deftest test-create-triple
   (testing "Creating triple"

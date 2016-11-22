@@ -1,4 +1,4 @@
-(ns commons-rdf-clj.protocols)
+(ns rdf.protocols)
 
 (defprotocol RDF
   (graph

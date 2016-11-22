@@ -1,4 +1,4 @@
-(ns commons-rdf-clj.utils
+(ns rdf.utils
   (:import
     [java.util UUID]
   )

@@ -1,13 +1,13 @@
-(ns commons-rdf-clj.seq
+(ns rdf.seq
   (:import
     (clojure.lang Seqable)
     (org.apache.commons.rdf.api Graph IRI Triple RDF RDFTerm Literal BlankNode)
     (java.util UUID)
     (org.apache.commons.rdf.simple SimpleRDF))
     (:require
-      [commons-rdf-clj.ns :refer [rdf xsd]]
-      [commons-rdf-clj.utils :refer [uuid]]
-      [commons-rdf-clj.protocols :as p]
+      [rdf.ns :refer [rdf xsd]]
+      [rdf.utils :refer [uuid]]
+      [rdf.protocols :as p]
       )
 )
 
