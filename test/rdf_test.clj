@@ -4,6 +4,7 @@
             [rdf :refer :all]))
 
 
+
 (deftest test-create-graph
   (testing "Creating an empty graph"
     (let [g (graph)]
@@ -15,13 +16,13 @@
       (is (= "http://example.com/" (iri-str iri))))))
 
 (deftest test-as-iri
-  (testing "as-iri from IRI"
+  (testing "iri from IRI"
     (let [i (iri "http://example.com/already-iri")]
       (is (= i (iri i)))))
   (testing "iri from String"
     (is (= "http://example.com/was-string"
              (iri-str (iri "http://example.com/was-string")))))
-  (testing "as-iri from java.net.URI"
+  (testing "iri from java.net.URI"
     (is (= "http://example.com/was-uri")
               (iri-str (iri (java.net.URI/create "http://example.com/was-uri"))))))
 

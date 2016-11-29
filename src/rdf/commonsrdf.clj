@@ -43,22 +43,25 @@
 
 (extend-type Graph
   p/Graph
-    (add-triple [g tripl]
-      (.add g (p/triple (simpleRDF) tripl))
-      g)
-    (add-triple [g subj pred obj]
-      (.add g (p/triple (simpleRDF) subj pred obj))
-      g)
-    (remove-triple [g tripl]
-      (.remove g (p/triple (simpleRDF) tripl))
-      g)
-    (remove-triple [g subj pred obj]
-      (.remove g (termPattern subj) (termPattern pred) (termPattern obj))
-      g)
-    (contains-triple? [g tripl]
-      (.contains g (p/triple (simpleRDF) triple)))
-    (contains-triple? [g subj pred obj]
-      (.contains g (termPattern subj) (termPattern pred) (termPattern obj)))
+    (add-triple
+      ([g tripl]
+        (.add g (p/triple (simpleRDF) tripl)
+        g)) ; Return same instance
+      ([g subj pred obj]
+        (.add g (p/triple (simpleRDF) subj pred obj)
+        g)))
+    (remove-triple
+      ([g tripl]
+        (.remove g (p/triple (simpleRDF) tripl))
+        g)
+      ([g subj pred obj]
+        (.remove g (termPattern subj) (termPattern pred) (termPattern obj))
+        g))
+    (contains-triple?
+      ([g tripl]
+        (.contains g (p/triple (simpleRDF) tripl)))
+      ([g subj pred obj]
+        (.contains g (termPattern subj) (termPattern pred) (termPattern obj))))
     (triple-count [g]
       (.size g))
 )

@@ -9,7 +9,7 @@
       [rdf.ns :refer [rdf xsd]]
       [rdf.utils :refer [uuid escape-literal]]
       [rdf.protocols :as p]
-      )
+    )
 )
 
 (defn- termPattern [term]
@@ -86,21 +86,22 @@
 
 (extend-type Seqable
   p/Graph
-    (add-triple [g tripl]
-      (conj g (p/triple {} tripl)))
-    (add-triple [g s p o]
-      (conj g {:subject (termPattern s) :predicate (termPattern p) :object (termPattern o)}))
-    (remove-triple [g tripl]
-      (disj g (p/triple {} triple)))
-    (remove-triple [g subj pred obj]
-      (disj g (p/triple {} subj pred obj))) ;; TODO: Handle null pattern
-    (contains-triple? [g tripl]
-      (.contains g (p/triple simpleRDF triple)))
-    (contains-triple? [g subj pred obj]
-      (.contains g (termPattern subj) (termPattern pred) (termPattern obj)))
-
-
-    (triple-count [g] (count g))
+  (add-triple
+    ([g tripl] (conj g (p/triple {} tripl)))
+    ([g s p o]
+      (conj g {:subject (termPattern s) :predicate (termPattern p) :object (termPattern o)})))
+  (remove-triple
+    ([g tripl]
+      (disj g (p/triple {} tripl)))
+    ([g subj pred obj]
+       ;; TODO: Handle null pattern
+      (disj g (p/triple {} subj pred obj))))
+  (contains-triple?
+    ([g tripl]
+      (.contains g (p/triple {} tripl)))
+    ([g subj pred obj]
+      (.contains g (termPattern subj) (termPattern pred) (termPattern obj))))
+  (triple-count [g] (count g))
 )
 
 (extend-type Associative
