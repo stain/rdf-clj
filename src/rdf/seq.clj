@@ -12,6 +12,14 @@
       )
 )
 
+(defn- termPattern [term]
+  (if (nil? term) nil ; return as-is
+    (cond ; coerce to a Clojure map
+      (p/iri? term) (p/iri {} term)
+      (p/blanknode? term) (p/blanknode {} term)
+      (p/literal? term) (p/literal {} term))))
+
+
 (extend-type String p/Term
   (iri? [obj] false)
   (blanknode? [obj] false)
@@ -81,7 +89,17 @@
     (add-triple [g tripl]
       (conj g (p/triple {} tripl)))
     (add-triple [g s p o]
-        (conj g {:subject s :predicate p :object o}))
+      (conj g {:subject (termPattern s) :predicate (termPattern p) :object (termPattern o)}))
+    (remove-triple [g tripl]
+      (disj g (p/triple {} triple)))
+    (remove-triple [g subj pred obj]
+      (disj g (p/triple {} subj pred obj))) ;; TODO: Handle null pattern
+    (contains-triple? [g tripl]
+      (.contains g (p/triple simpleRDF triple)))
+    (contains-triple? [g subj pred obj]
+      (.contains g (termPattern subj) (termPattern pred) (termPattern obj)))
+
+
     (triple-count [g] (count g))
 )
 

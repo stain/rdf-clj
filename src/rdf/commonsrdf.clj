@@ -7,16 +7,34 @@
     [rdf.utils :refer [if-instance]]
     [rdf.protocols :as p]))
 
+(defn- simpleRDF [] (SimpleRDF.))
 
-;
+(defn- termPattern [term]
+  (if (nil? term) nil ; return as-is
+    (if-instance term RDFTerm ; return as-is
+      (cond ; coerce to a Commons RDF instance
+        (p/iri? term) (p/iri (simpleRDF) term)
+        (p/blanknode? term) (p/blanknode (simpleRDF) term)
+        (p/literal? term) (p/literal (simpleRDF) term)))))
+
 (extend-type Graph
   p/Graph
     (add-triple [g tripl]
-      (.add g tripl) ;; TODO: Type cohersion
+      (.add g (p/triple (simpleRDF) tripl))
       g)
     (add-triple [g subj pred obj]
-      (.add g subj pred obj) ;; TODO: Type cohersion
+      (.add g (p/triple (simpleRDF) subj pred obj))
       g)
+    (remove-triple [g tripl]
+      (.remove g (p/triple (simpleRDF) tripl))
+      g)
+    (remove-triple [g subj pred obj]
+      (.remove g (termPattern subj) (termPattern pred) (termPattern obj))
+      g)
+    (contains-triple? [g tripl]
+      (.contains g (p/triple (simpleRDF) triple)))
+    (contains-triple? [g subj pred obj]
+      (.contains g (termPattern subj) (termPattern pred) (termPattern obj)))
     (triple-count [g]
       (.size g))
 )
@@ -31,7 +49,7 @@
 
 (extend-type RDF
   p/RDF
-      (graph
+    (graph
         ([f] (.createGraph f))
         ([f g] (if-instance Graph g
           (reduce p/add-triple (p/graph f) g))))

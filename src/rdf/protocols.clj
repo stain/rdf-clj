@@ -44,9 +44,14 @@
   (add-triple
     [g t]
     [g subj pred obj])
+  (remove-triple
+    [g t]
+    [g subj pred obj])
+  (contains-triple?
+    [g t]
+    [g subj pred obj])
   (triple-count [g])
 )
-
 
 ; nil: not iri, literal or blanknode
 (extend-type nil Term
