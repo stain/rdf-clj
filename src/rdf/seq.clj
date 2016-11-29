@@ -34,14 +34,12 @@
 (extend-type URI p/Term
   (literal? [obj] false)
   (blanknode? [obj] false)
-
   (iri? [uri] true)
   (iri-str [uri] (str uri))
   (ntriples-str [uri] (str "<" uri ">")))
 
 ;
 (extend-type clojure.lang.Keyword p/Term
-  (iri? [obj] false)
   (literal? [obj] false)
   (blanknode? [obj] false)
 
