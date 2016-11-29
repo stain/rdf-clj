@@ -52,14 +52,12 @@
 
 
 (extend-type UUID p/Term
-  (iri? [obj] false)
+  (iri? [obj] true)
+  (blanknode? [uuid] true) ; if you want to?
   (literal? [obj] false)
-
-  (blanknode? [uuid] true)
-  (blanknode-id [uuid] (str uuid))
+  (blanknode-ref [uuid] (str uuid))
+  (iri-str [uuid] (str "urn:uuid:" uuid))
   (ntriples-str [uuid] (str "_:" uuid)))
-
-
 
 (extend-type Associative p/Term
   (iri? [term] (contains? term :iri))
@@ -73,7 +71,7 @@
                                 (str \" (escape-literal (:literal term))  \")))
 
   (iri-str [iri] (str (:iri iri)))
-  (blanknode-id [bnode] (str (:blanknode bnode)))
+  (blanknode-ref [bnode] (str (:blanknode bnode)))
 
   (literal-str [lit] (str (:literal lit)))
   (literal-lang [lit] (:language lit)) ;; TODO: Ensure nil or str
