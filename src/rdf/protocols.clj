@@ -29,7 +29,7 @@
   (literal-lang [term])
   (literal-type [term])
 
-  (blanknode-id [term])
+  (blanknode-ref [term])
 )
 
 

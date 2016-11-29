@@ -1,19 +1,29 @@
-(ns rdf
+  (ns rdf
   (:import
+    (org.apache.commons.rdf.api RDF)
     (org.apache.commons.rdf.simple SimpleRDF))
   (:require
+    [rdf.utils :as u]
     [rdf.protocols :as p]
     [rdf.ns]
     [rdf.seq]
-    [rdf.commonsrdf]))
+    [rdf.commonsrdf :as c]))
 
 
-(def ^:dynamic *rdf* {})
+(defn rdf-impl
+  ([] (rdf-impl :clojure))
+  ([r]
+    (cond
+      (= :clojure r) (hash-map)
+      (keyword? r) (c/rdf-impl r)
+      :else r)))
+
+
+(def ^:dynamic *rdf* (rdf-impl :clojure))
 
 (defmacro with-rdf [r & body]
-  `(binding [*rdf* ~r]
+  `(binding [*rdf* (rdf-impl ~r)]
     ~@body))
-
 
 ; expose p/Graph protocol using *rdf*
 
@@ -45,7 +55,7 @@
 (defn literal-str [term] (p/literal-str term))
 (defn literal-lang [term] (p/literal-lang term))
 (defn literal-type [term] (p/literal-type term))
-(defn blanknode-id [term] (p/blanknode-id term))
+(defn blanknode-ref [term] (p/blanknode-ref term))
 
 ; expose p/Triple protocol
 (defn subject [t] (p/subject t))
