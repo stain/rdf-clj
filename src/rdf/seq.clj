@@ -1,6 +1,6 @@
 (ns rdf.seq
   (:import
-    (clojure.lang Seqable Associative)
+    (clojure.lang Seqable Associative Sequential)
     (org.apache.commons.rdf.api Graph IRI Triple RDF RDFTerm Literal BlankNode)
     (java.util UUID)
     (java.net URI)
@@ -107,9 +107,9 @@
     (object [m] (:object m)))
 
 ;
-(extend-type Seqable
+(extend-type Sequential
   p/Triple
-    (subject [t] (nth t 0))
+    (subject [t] (println t) (nth t 0))
     (predicate [t] (nth t 1))
     (object [t] (nth t 2)))
 
