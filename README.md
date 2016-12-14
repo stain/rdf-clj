@@ -103,8 +103,7 @@ by using the `with-rdf` macro. For instance, to use the
 [Commons RDF Simple](https://commons.apache.org/proper/commons-rdf/implementations.html#Commons_RDF_Simple)
 implementation:
 
-```
-#object[org.apache.commons.rdf.simple.IRIImpl 0x2f50d756 "<http://example.com/>"]
+```clojure
 example1=> (with-rdf :simple
       #_=>   (triple (blanknode) (iri "http://example.com/greeting") (literal "Hello")))
 #object[org.apache.commons.rdf.simple.TripleImpl 0x4f6ab4db
@@ -133,6 +132,7 @@ If your application desires to be flexible with which implementations
 to support, see the [rdf.commonsrdf/rdf-impls](src/rdf/commonsrdf.clj) method,
 which finds Commons RDF implementations on the classpath using an
 [ServiceLoader approach](https://commons.apache.org/proper/commons-rdf/userguide.html#Finding_an_RDF_implementation).
+
 
 
 
