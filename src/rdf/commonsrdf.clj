@@ -86,8 +86,14 @@
         (if-instance Literal lit) (.createLiteral f (str lit)))
       ([f lit type-or-lang]
         (.createLiteral f (str lit)
-          (if-instance String type-or-lang
-            (p/iri f type-or-lang)))))
+          (if (p/iri? type-or-lang)
+            (p/iri f type-or-lang)) ; must be type
+            (name type-or-lang))); must be non-nil lang
+      ([f lit type lang]
+        (if (nil? lang)
+          (.createLiteral f (str lit) (p/iri f type))
+          (.createLiteral f (str lit) (p/iri f type) (name lang)))))
+
     (blanknode
       ([f]
         (.createBlankNode f))

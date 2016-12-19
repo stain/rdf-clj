@@ -7,7 +7,8 @@
   (iri [f iri])
   (literal
     [f lit]
-    [f lit type-or-lang])
+    [f lit type-or-lang]
+    [f lit type lang])
   (blanknode
     [f]
     [f name])

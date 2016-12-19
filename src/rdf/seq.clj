@@ -1,6 +1,6 @@
 (ns rdf.seq
   (:import
-    (clojure.lang Seqable Associative Sequential ITransientCollection)
+    (clojure.lang Seqable Associative Sequential ITransientCollection Keyword)
     (org.apache.commons.rdf.api Graph IRI Triple RDF RDFTerm Literal BlankNode)
     (java.util UUID)
     (java.net URI)
@@ -39,10 +39,9 @@
   (ntriples-str [uri] (str "<" uri ">")))
 
 ;
-(extend-type clojure.lang.Keyword p/Term
+(extend-type Keyword p/Term
   (literal? [obj] false)
   (blanknode? [obj] false)
-
   (iri? [kw] (not (nil? (p/iri-str kw))))
   (iri-str [kw] (get-in (ns-publics 'rdf.ns)
     [(keyword (name kw)) :iri]))
@@ -139,7 +138,7 @@
 (extend-type Associative p/RDF
   (graph
     ([f] (set f))
-    ([f g] (set g)))
+    ([f g] (set g))) ; TODO: Should we instead (reduce cond) to the f instance?
   (triple
     ([f t] (merge f {:subject (p/subject t) :predicate (p/predicate t) :object (p/object t)}))
     ([f subj pred obj] (merge f { :subject subj :predicate pred :object obj }))) ;; TODO: Map to our own types?
@@ -152,7 +151,12 @@
       (merge f {:literal (str lit)}
         (if (p/iri? type-or-lang)
           {:datatype (p/iri-str type-or-lang)}
-          {:language (name type-or-lang)}))))
+          {:language (name type-or-lang)})))
+    ([f lit type lang]
+      {:literal (str lit)
+       :datatype (p/iri-str type)
+       :language (name lang)
+      }))
 
   (blanknode
     ([f] (assoc f :blanknode (uuid)))
