@@ -33,6 +33,7 @@
   default implementation, currently :clojure"
   ([] (rdf-impl :clojure))
   ([r]
+    {:post [(satisfies? p/RDF %)]}
     (cond
       (= :clojure r) (hash-map)
       (= :any r) (c/rdf-impl)
@@ -63,7 +64,7 @@
 (defn graph
   "Create a graph of RDF triples.
 
-  If arument g is provided, it's triples will be added
+  If argument g is provided, it's triples will be added
   to the graph.
 
   The type of underlying storage for the graph is determined by the
@@ -73,10 +74,13 @@
 
 (defn iri
   "Create a IRI."
-  [iri] (p/iri *rdf* iri))
+  [iri]
+  {:pre [(not (nil? iri))]
+   :post [(p/iri? %)]}
+  (p/iri *rdf* iri))
 
 (defn literal
-  "Create a literal from a lexical value.
+  "Create or return an RDF literal.
 
   If only one argument is provided, and the value is a
   (literal?), then it would be returned as-is or mapped to
@@ -93,38 +97,158 @@
   (or nil), while the second argument must be a datatype iri.
   "
   ([lit]
-      (p/literal *rdf* lit))
+    {:pre [(not (nil? lit))]
+     :post [(p/literal? %)]}
+    (p/literal *rdf* lit))
   ([lit type-or-lang]
+    {:pre [(not (nil? lit))
+           (or (p/iri? type-or-lang)
+               (string? type-or-lang)
+               (keyword? type-or-lang))]
+     :post [(p/literal? %)]}
     (p/literal *rdf* lit type-or-lang))
   ([lit type lang]
+    {:pre [(not (nil? lit))
+           (p/iri? type)
+           (or (string? lang) (keyword? lang))]
+     :post [(p/literal? %)]}
     (p/literal *rdf* lit type lang)))
 
 (defn blanknode
-  ([] (p/blanknode *rdf*))
-  ([label] (p/blanknode *rdf* label)))
+  "Create a blank node.  If the argument label is provided,
+  it may be used to locally identify the blank node."
+  ([]
+    {:post [(p/blanknode? %)]}
+    (p/blanknode *rdf*))
+  ([label]
+    {:post [(p/blanknode? %)]}
+    (p/blanknode *rdf* label)))
+
+
+(defn term?
+  "Return true if t is an RDF term (IRI, blank node or string)"
+  [t]
+    (boolean (or (p/iri? t) (p/blanknode? t) (p/literal? t))))
+
+(defn triple? [t]
+  "Return true if t is an RDF triple.
+  The triple must have a valid subject, predicate and object."
+  (boolean (and
+    (p/subject t) (p/predicate t) (p/object t))))
+
+(defn graph? [g]
+  "Return true if g can be accessed as an RDF graph"
+  (satisfies? p/Graph g))
 
 (defn triple
-  ([t] (p/triple *rdf* t))
-  ([subj pred obj] (p/triple *rdf* subj pred obj)))
+  "Create an RDF triple, either from an existing triple t,
+  or for a new triple given as subj pred obj.
 
-; expose p/Term protocol
-(defn iri? [term] (p/iri? term))
-(defn literal? [term] (p/literal? term))
-(defn blanknode? [term] (p/blanknode? term))
-(defn ntriples-str [term] (p/ntriples-str term))
-(defn iri-str [term] (p/iri-str term))
-(defn literal-str [term] (p/literal-str term))
-(defn literal-lang [term] (p/literal-lang term))
-(defn literal-type [term] (p/literal-type term))
-(defn blanknode-ref [term] (p/blanknode-ref term))
+  Example:
+      (triple (blanknode) (iri \"http://schema.org/name\") (literal \"Example\"))
+  "
+  ([t]
+    {:pre [(triple? t)]
+     :post [(triple? %)]}
+    (p/triple *rdf* t))
+  ([subj pred obj]
+    {:pre [(or (p/iri? subj) (p/blanknode? subj))
+           (p/iri? pred)
+           (term? obj)]
+    :post [(triple? %)]}
+    (p/triple *rdf* subj pred obj)))
 
 ; expose p/Triple protocol
-(defn subject [t] (p/subject t))
-(defn predicate [t] (p/predicate t))
-(defn object [t] (p/object t))
+(defn subject [t]
+  {:post [(or (p/iri? %) (p/blanknode? %))]}
+  (p/subject t))
+(defn predicate [t]
+  {:post [(p/iri? %)]}
+  (p/predicate t))
+(defn object [t]
+  {:post [(term? %)]}
+  (p/object t))
+
+; expose p/Term protocol
+(defn iri?
+  "Return true if term is an IRI"
+  [term]
+  (boolean (p/iri? term)))
+
+(defn literal?
+  "Return true if term is a literal"
+  [term]
+  (boolean (p/literal? term)))
+
+(defn blanknode?
+  "Return true if term is a blank node"
+  [term]
+  (boolean (p/blanknode? term)))
+
+(defn ntriples-str
+  "Return the N-Triples representation of the RDF term or triple t
+
+  Examples:
+      (ntriples-str (literal \"Hello\" :en)) ; => \"Hello\"@en
+      (ntriples-str t) ; => _:b0 <http://example.com/> \"Hello\" .
+  "
+  [t]
+  {:post [(string? %)]}
+  (if (term? t)
+    (p/ntriples-str t)
+    (let [s (p/ntriples-str (subject t))
+          p (p/ntriples-str (predicate t))
+          o (p/ntriples-str (object t))]
+          (str s " " p " " o " ."))))
+
+(defn iri-str
+  "Return the IRI string of i"
+  [i]
+  {:post [(string? %)]}
+  (p/iri-str i))
+
+(defn literal-str
+  "Return the lexical string of RDF literal"
+  [lit]
+  {:post [(string? %)]}
+   (p/literal-str lit))
+
+(defn literal-lang
+  "Return the language tag of RDF literal,
+  or nil if the literal has no language."
+  [lit]
+  {:post [(or (nil? %) (string? %))]}
+  (p/literal-lang lit))
+
+(defn literal-type
+  "Return the language type IRI of RDF literal"
+  [lit]
+  {:post [(p/iri? %)]}
+  (p/literal-type lit))
+
+(defn blanknode-ref
+  "Return a reference string for blank node"
+  [lit]
+  {:post [(string? %)]}
+  (p/blanknode-ref lit))
+
 
 ; expose p/Graph protocol
 (defn add-triple
-  ([g t] (p/add-triple g t))
-  ([g subj pred obj] (p/add-triple g subj pred obj)))
-(defn triple-count [g] (p/triple-count g))
+  "Return a graph with the triple added"
+  ([g t]
+    {:pre [(triple? t)]
+     :post [(satisfies? p/Graph %)]}
+    (p/add-triple g t))
+  ([g subj pred obj]
+    {:pre [(or (iri? subj) (blanknode? subj))
+           (iri? pred)
+           (satisfies? p/Term obj)]
+     :post [(satisfies? p/Graph %)]}
+     (p/add-triple g subj pred obj)))
+
+(defn triple-count
+  "Return count of triples in graph"
+  [g]
+  {:post [(<= 0 %)]}
+  (p/triple-count g))
