@@ -1,4 +1,4 @@
-(defproject commons-rdf-clj "0.1.0-SNAPSHOT"
+(defproject commons-rdf-clj "0.1.0"
   :description "Clojure wrapper for Apache Commons RDF"
   :url "http://commonsrdf.incubator.apache.org/"
   :license {:name "Apache License, version 2.0"
