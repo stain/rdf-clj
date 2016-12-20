@@ -1,4 +1,4 @@
-(defproject rdf-clj "0.2.0-SNAPSHOT"
+(defproject rdf-clj "0.1.0"
   :description "Clojure wrapper for Apache Commons RDF"
   :url "https://github.com/stain/rdf-clj"
   :license {:name "Apache License, version 2.0"
