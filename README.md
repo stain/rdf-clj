@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/stain/commons-rdf-clj.svg?branch=master)](https://travis-ci.org/stain/commons-rdf-clj)
 
+[![Clojars Project](https://img.shields.io/clojars/v/rdf-clj.svg)](https://clojars.org/rdf-clj)
+
+
 This is an early attempt to create Clojure RDF library
 with bindings for
 [Apache Commons RDF](http://commonsrdf.incubator.apache.org/)
@@ -31,6 +34,10 @@ Install using [Leiningen](http://leiningen.org/)
 To run the tests:
 
     lein test
+
+Use from your Leiningen project:
+
+    [rdf-clj "0.1.0"]
 
 
 ## License
