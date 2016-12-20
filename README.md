@@ -1,6 +1,6 @@
 # rdf-clj
 
-[![Build Status](https://travis-ci.org/stain/commons-rdf-clj.svg?branch=master)](https://travis-ci.org/stain/commons-rdf-clj)
+[![Build Status](https://travis-ci.org/stain/rdf-clj.svg?branch=master)](https://travis-ci.org/stain/rdf-clj)
 
 [![Clojars Project](https://img.shields.io/clojars/v/rdf-clj.svg)](https://clojars.org/rdf-clj)
 
