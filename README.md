@@ -42,8 +42,8 @@ Use from your Leiningen project:
 
 ## License
 
-Copyright © 2015-2016 Stian Soiland-Reyes
-Copyright © 2015-2016 University of Manchester
+* Copyright © 2015-2016 Stian Soiland-Reyes
+* Copyright © 2015-2016 University of Manchester
 
 Distributed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0). See the file
 [LICENSE](LICENSE) for details.
