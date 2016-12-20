@@ -37,7 +37,7 @@
 (defn rdf-impl
   ([] (first (rdf-impls-seq)))
   ([k]
-    (if (= :simple) (simpleRDF) ; no need for ServiceLoader and mapping
+    (if (= :simple k) (simpleRDF) ; no need for ServiceLoader and mapping
       (get (rdf-impls) (keyword k)))))
 
 
@@ -80,10 +80,10 @@
         ([f] (.createGraph f))
         ([f g] (if-instance Graph g
           (reduce p/add-triple (p/graph f) g))))
-    (iri [f iri] (if-instance IRI iri (.createIRI f (str iri))))
+    (iri [f iri] (if-instance IRI iri (.createIRI f (p/iri-str iri))))
     (literal
       ([f lit]
-        (if-instance Literal lit) (.createLiteral f (str lit)))
+        (if-instance Literal lit) (.createLiteral f (p/literal-str lit)))
       ([f lit type-or-lang]
         (.createLiteral f (str lit)
           (if (p/iri? type-or-lang)
@@ -132,6 +132,8 @@
 
 
 (extend-type BlankNode p/Term
+  (iri? [iri] false)
+  (literal? [literal] false)
   (blanknode? [bnode] true)
   (blanknode-ref [bnode] (.uniqueReference bnode))
   (ntriples-str [term] (.ntriplesString term)))

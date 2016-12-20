@@ -6,11 +6,18 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.apache.commons/commons-rdf-api "0.3.0-incubating"]
                  [org.apache.commons/commons-rdf-simple "0.3.0-incubating"]
-;                 [org.apache.commons/commons-rdf-jena "0.3.0-incubating"]
-;                 [org.apache.commons/commons-rdf-rdf4j "0.3.0-incubating"]
-;                 [org.apache.commons/commons-rdf-jsonld-java "0.3.0-incubating"]
+
 ;                [potemkin "0.3.13"]
-                 
+
                 ]
+
+  :profiles {
+    :dev {
+      :dependencies [[org.apache.commons/commons-rdf-jena "0.3.0-incubating"]
+                   [org.apache.commons/commons-rdf-rdf4j "0.3.0-incubating"]
+                   [org.apache.commons/commons-rdf-jsonld-java "0.3.0-incubating"]
+                  ]
+                }
+              }
 ;  :repositories { "apache-snapshot" "http://repository.apache.org/snapshots"}
-              )
+)
