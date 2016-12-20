@@ -1,6 +1,6 @@
-(defproject commons-rdf-clj "0.2.0-SNAPSHOT"
+(defproject rdf-clj "0.2.0-SNAPSHOT"
   :description "Clojure wrapper for Apache Commons RDF"
-  :url "http://commonsrdf.incubator.apache.org/"
+  :url "https://github.com/stain/rdf-clj"
   :license {:name "Apache License, version 2.0"
             :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [[org.clojure/clojure "1.8.0"]
