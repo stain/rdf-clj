@@ -8,6 +8,7 @@
     (org.eclipse.rdf4j.model Statement)
     )
   (:require
+    [rdf.utils :refer [if-instance]]
     [rdf.protocols :as p]
     [rdf.commonsrdf :as c]
     ))
