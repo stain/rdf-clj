@@ -17,22 +17,33 @@
     [f subj pred obj])
 )
 
+
 (defprotocol Term
-  (iri? [term])
-  (literal? [term])
-  (blanknode? [term])
+  (iri? ^Boolean [term])
+  (literal?  ^Boolean [term])
+  (blanknode? ^Boolean  [term])
 
-  (ntriples-str [term])
+  (ntriples-str ^String [term])
 
-  (iri-str [term])
+  (iri-str ^String [term])
 
-  (literal-str [term])
-  (literal-lang [term])
+  (literal-str ^String [term])
+  (literal-lang ^String [term])
   (literal-type [term])
 
   (blanknode-ref [term])
 )
 
+(defn term
+  "Coerce t to be an RDF term (iri, literal or blanknode)
+  from RDF implementation f. "
+  [f t]
+  (cond
+    (iri? t) (iri f t)
+    (blanknode? t) (blanknode f t)
+    ; Below should do (str t) if t is not already
+    ; a literal
+    :else (literal f t)))
 
 (defprotocol Triple
   (subject [t])
