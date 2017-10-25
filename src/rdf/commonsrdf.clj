@@ -45,11 +45,11 @@
   p/Graph
     (add-triple
       ([g tripl]
-       (.add g (p/triple (simpleRDF) tripl)
-        g)) ; Return same instance
+       (.add g (p/triple (simpleRDF) tripl))
+       g) ; Return same instance
       ([g subj pred obj]
-       (.add g (p/triple (simpleRDF) subj pred obj)
-        g)))
+       (.add g (p/triple (simpleRDF) subj pred obj))
+       g))
     (remove-triple
       ([g tripl]
        (.remove g (p/triple (simpleRDF) tripl))
