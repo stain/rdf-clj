@@ -37,7 +37,7 @@ To run the tests:
 
 Use from your Leiningen project:
 
-    [rdf-clj "0.1.0"]
+    [rdf-clj "0.2.0-SNAPSHOT"]
 
 
 ## License
